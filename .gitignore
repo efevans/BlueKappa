@@ -362,3 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 .env
+
+# VS AWS Lambda publish settings
+aws-lambda-tools-defaults.json
