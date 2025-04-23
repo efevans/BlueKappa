@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaush.Client", "Yaush.Client\Yaush.Client.csproj", "{B1E1ADC0-B6F8-4C78-9E2E-B7458E8D0574}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaush.UrlCreateLambda", "Yaush.UrlCreateLambda\Yaush.UrlCreateLambda.csproj", "{323FB754-390D-FB78-CE06-C5ADA192113E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B1E1ADC0-B6F8-4C78-9E2E-B7458E8D0574}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1E1ADC0-B6F8-4C78-9E2E-B7458E8D0574}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1E1ADC0-B6F8-4C78-9E2E-B7458E8D0574}.Release|Any CPU.Build.0 = Release|Any CPU
+		{323FB754-390D-FB78-CE06-C5ADA192113E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{323FB754-390D-FB78-CE06-C5ADA192113E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{323FB754-390D-FB78-CE06-C5ADA192113E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{323FB754-390D-FB78-CE06-C5ADA192113E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
