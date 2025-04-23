@@ -1,7 +1,97 @@
 ﻿@page "/"
+@using System.Text.Json
+@using System.Text
+@using static System.Net.Mime.MediaTypeNames
+@inject HttpClient Http
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Blue Kappa</PageTitle>
+<MudContainer MaxWidth="MaxWidth.Small">
+    <MudPaper Width="100%" Class="d-flex justify-center mt-16" Elevation="0">
+        <MudPaper Class="d-flex flex-column gap-4" Elevation="0">
+            <MudPaper Class="pa-4 d-flex flex-row gap-2">
+                <MudTextField @bind-Value="Url"
+                              Label="Your url here"
+                              Variant="Variant.Outlined"
+                              Immediate="true" />
 
-<h1>Hello, world!</h1>
+                <MudButton OnClick="HandleShortenClick"
+                           Variant="Variant.Filled"
+                           StartIcon="@Icons.Material.Filled.Forward"
+                           Color="Color.Primary"
+                           Size="Size.Large"
+                           Disabled=@(string.IsNullOrEmpty(Url)) />
+            </MudPaper>
+            @(
+                WaitingForResponse switch
+                {
+                    UserState.ResponseReceived => (@<MudPaper Class="pa-4">
+                <MudTextField @bind-Value="ShortenedUrl"
+                              ReadOnly="true"
+                              Variant="Variant.Filled" />
+            </MudPaper>),
+                    UserState.AwaitingResponse => (@<div class="d-flex flex-row justify-center mt-8">
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            </div>),
+                    _ => (@<div />)
+                }
 
-Welcome to your new app.
+                )
+
+
+
+        </MudPaper>
+    </MudPaper>
+</MudContainer>
+
+@code
+{
+    public string Url { get; set; } = string.Empty;
+    public string ShortenedUrl { get; set; } = string.Empty;
+
+    private enum UserState
+    {
+        InputtingUrl,
+        AwaitingResponse,
+        ResponseReceived
+    }
+
+    private UserState WaitingForResponse = UserState.InputtingUrl;
+
+    private async Task HandleShortenClick()
+    {
+        if (string.IsNullOrEmpty(Url))
+            return;
+
+        await ShortenUrl(Url);
+    }
+
+    private async Task ShortenUrl(string url)
+    {
+        WaitingForResponse = UserState.AwaitingResponse;
+        var requestJson = new StringContent(
+            JsonSerializer.Serialize(new CreateShortenedLinkRequest() { Url = url }));
+        var resp = await Http.PostAsync("/", requestJson);
+        WaitingForResponse = UserState.ResponseReceived;
+
+        if (resp is null || resp.IsSuccessStatusCode == false)
+            return;
+
+        using var responseStream = await resp.Content.ReadAsStreamAsync();
+        var shortenedUrlResponse = JsonSerializer.Deserialize<ShortenUrlResponse>(responseStream);
+
+        if (shortenedUrlResponse is null)
+            return;
+
+        ShortenedUrl = shortenedUrlResponse.ShortenedUrl;
+    }
+
+    public class CreateShortenedLinkRequest
+    {
+        public required string Url { get; set; }
+    }
+
+    public class ShortenUrlResponse
+    {
+        public string ShortenedUrl { get; set; } = string.Empty;
+    }
+}
