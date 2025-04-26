@@ -11,6 +11,7 @@
         <MudPaper Class="d-flex flex-column gap-4" Elevation="0">
             <MudPaper Class="pa-4 d-flex flex-row gap-2">
                 <MudTextField @bind-Value="Url"
+                @ref="mudTextField"
                 Label="Your url here"
                 Variant="Variant.Outlined"
                 Immediate="true" />
@@ -23,12 +24,12 @@
                 Disabled=@(string.IsNullOrEmpty(Url)) />
             </MudPaper>
             @(
-                                            WaitingForResponse switch
-                                            {
-                                                UserState.ResponseReceived => (
+                                WaitingForResponse switch
+                                {
+                                    UserState.ResponseReceived => (
                 @<MudPaper Class="pa-4 d-flex flex-row gap-2">
                 <MudTextField id="@ShortenedUrlInputId"
-                    @bind-Value="ShortenedUrl"
+                              @bind-Value="ShortenedUrl"
                               ReadOnly="true"
                               Variant="Variant.Filled" />
                 <MudIconButton OnClick="HandleCopyToClipboardClick"
@@ -37,15 +38,13 @@
                                Color="Color.Primary"
                                Size="Size.Large" />
             </MudPaper>),
-                                                UserState.AwaitingResponse => (@<div class="d-flex flex-row justify-center mt-8">
+                                    UserState.AwaitingResponse => (@<div class="d-flex flex-row justify-center mt-8">
                 <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
             </div>),
-                                                _ => (@<div />)
-                                            }
+                                    _ => (@<div />)
+                                }
 
-                                        )
-
-
+                            )
 
         </MudPaper>
     </MudPaper>
@@ -57,6 +56,8 @@
 
     public string Url { get; set; } = string.Empty;
     public string ShortenedUrl { get; set; } = string.Empty;
+
+    private MudTextField<string> mudTextField = null!;
 
     private enum UserState
     {
@@ -73,6 +74,14 @@
         {
             await JSHost.ImportAsync("Home",
                     $"../Pages/Home.razor.js");
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (mudTextField is not null)
+        {
+            await mudTextField.FocusAsync();
         }
     }
 
