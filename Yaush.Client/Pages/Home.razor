@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using System.Text.Json
 @using System.Text
+@using System.Runtime.InteropServices.JavaScript
 @using static System.Net.Mime.MediaTypeNames
 @inject HttpClient Http
 
@@ -10,32 +11,39 @@
         <MudPaper Class="d-flex flex-column gap-4" Elevation="0">
             <MudPaper Class="pa-4 d-flex flex-row gap-2">
                 <MudTextField @bind-Value="Url"
-                              Label="Your url here"
-                              Variant="Variant.Outlined"
-                              Immediate="true" />
+                Label="Your url here"
+                Variant="Variant.Outlined"
+                Immediate="true" />
 
-                <MudButton OnClick="HandleShortenClick"
-                           Variant="Variant.Filled"
-                           StartIcon="@Icons.Material.Filled.Forward"
-                           Color="Color.Primary"
-                           Size="Size.Large"
-                           Disabled=@(string.IsNullOrEmpty(Url)) />
+                <MudIconButton OnClick="HandleShortenClick"
+                Variant="Variant.Filled"
+                Icon="@Icons.Material.Filled.Forward"
+                Color="Color.Primary"
+                Size="Size.Large"
+                Disabled=@(string.IsNullOrEmpty(Url)) />
             </MudPaper>
             @(
-                WaitingForResponse switch
-                {
-                    UserState.ResponseReceived => (@<MudPaper Class="pa-4">
-                <MudTextField @bind-Value="ShortenedUrl"
+                                            WaitingForResponse switch
+                                            {
+                                                UserState.ResponseReceived => (
+                @<MudPaper Class="pa-4 d-flex flex-row gap-2">
+                <MudTextField id="@ShortenedUrlInputId"
+                    @bind-Value="ShortenedUrl"
                               ReadOnly="true"
                               Variant="Variant.Filled" />
+                <MudIconButton OnClick="HandleCopyToClipboardClick"
+                               Variant="Variant.Filled"
+                               Icon="@Icons.Material.Filled.CopyAll"
+                               Color="Color.Primary"
+                               Size="Size.Large" />
             </MudPaper>),
-                    UserState.AwaitingResponse => (@<div class="d-flex flex-row justify-center mt-8">
+                                                UserState.AwaitingResponse => (@<div class="d-flex flex-row justify-center mt-8">
                 <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
             </div>),
-                    _ => (@<div />)
-                }
+                                                _ => (@<div />)
+                                            }
 
-                )
+                                        )
 
 
 
@@ -45,6 +53,8 @@
 
 @code
 {
+    private const string ShortenedUrlInputId = "shortened-url";
+
     public string Url { get; set; } = string.Empty;
     public string ShortenedUrl { get; set; } = string.Empty;
 
@@ -57,12 +67,27 @@
 
     private UserState WaitingForResponse = UserState.InputtingUrl;
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (OperatingSystem.IsBrowser())
+        {
+            await JSHost.ImportAsync("Home",
+                    $"../Pages/Home.razor.js");
+        }
+    }
+
     private async Task HandleShortenClick()
     {
         if (string.IsNullOrEmpty(Url))
             return;
 
         await ShortenUrl(Url);
+    }
+
+    private void HandleCopyToClipboardClick()
+    {
+        Console.WriteLine("in HandleCopyToClipboardClick");
+        ToClipboard(ShortenedUrl);
     }
 
     private async Task ShortenUrl(string url)
