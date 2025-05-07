@@ -100,6 +100,8 @@ public class Function
             };
         }
 
+        context.Logger.LogInformation("Shortened url created for: {host}", new Uri(createRequest.Url).Host);
+
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(connString);
         using var dataSource = dataSourceBuilder.Build();
 
