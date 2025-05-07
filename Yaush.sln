@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaush.UrlCreateLambda", "Ya
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaush.UrlRedirectLambda", "Yaush.UrlRedirectLambda\Yaush.UrlRedirectLambda.csproj", "{157CED04-19D3-6462-8C90-AA52BD74021C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaush.GhostUser", "Yaush.GhostUser\Yaush.GhostUser.csproj", "{2FCAB0FB-50D9-163B-521A-16BF97733A7C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{157CED04-19D3-6462-8C90-AA52BD74021C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{157CED04-19D3-6462-8C90-AA52BD74021C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{157CED04-19D3-6462-8C90-AA52BD74021C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FCAB0FB-50D9-163B-521A-16BF97733A7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FCAB0FB-50D9-163B-521A-16BF97733A7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FCAB0FB-50D9-163B-521A-16BF97733A7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FCAB0FB-50D9-163B-521A-16BF97733A7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
