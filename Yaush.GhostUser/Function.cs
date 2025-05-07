@@ -16,12 +16,10 @@ public class Function
         ConfigureServiceCollection();
     }
 
-    public async Task<string> FunctionHandler(string input, ILambdaContext context)
+    public async Task FunctionHandler(ILambdaContext context)
     {
-        context.Logger.LogInformation("ghost user created shortened url for {host}", input);
         using ServiceProvider serviceProvider = _serviceCollection.BuildServiceProvider();
-        var createShortenedUrlResponse = await serviceProvider.GetService<App>()!.Run(input);
-        return createShortenedUrlResponse.ShortenedUrl;
+        var createShortenedUrlResponse = await serviceProvider.GetService<App>()!.Run();
     }
 
     private ServiceCollection _serviceCollection = null!;

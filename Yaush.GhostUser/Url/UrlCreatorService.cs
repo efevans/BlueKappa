@@ -15,7 +15,7 @@ namespace Yaush.GhostUser.Url
 
         public async Task<CreateShortenUrlResponse> CreateShortenedUrl(string url)
         {
-            _logger.LogInformation("Logging first time {time}", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
+            _logger.LogInformation("Creating shortened url for {url}", url);
             var requestJson = new StringContent(
                 JsonSerializer.Serialize(new CreateShortenedUrlRequest() { Url = url }));
             var resp = await _httpClient.PostAsync("/", requestJson);
